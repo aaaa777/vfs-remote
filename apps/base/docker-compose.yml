@@ -1,0 +1,7 @@
+services:
+  npm:
+    build: .
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: ["./build.sh"]
