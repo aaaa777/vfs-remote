@@ -1641,7 +1641,7 @@
             performance.mark('poc-init-start');
         });
         const module = await compileWebAssemblyModule(response);
-        const fsize = (await response).headers.get("content-length");
+        const fsize = await response.then(res => res.arrayBuffer().then(_ => res.headers.get("content-length")));
         pocSpanFsize.innerHTML = fsize;
         const { vm } = await DefaultRubyVM(module, options);
         exports.rubyVM = vm;
