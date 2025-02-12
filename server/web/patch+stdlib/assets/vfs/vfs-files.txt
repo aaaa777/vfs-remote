@@ -1,0 +1,5 @@
+vfs
+vfs/app
+vfs/app/lib
+vfs/app/lib/main.rb
+vfs/vfs-files.txt
