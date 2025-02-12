@@ -64,6 +64,6 @@ export const vfsDirMap = new PreopenDirectory(
 end
 
 output_js = tree_to_ts(tree_structure['vfs'])
-puts output_js
+# puts output_js
 
 File.write('src/dir_map.ts', output_js)

@@ -83,7 +83,7 @@ mkdir -p ./dist/assets/wasm
 # this script uses rbwasm command be removed wasi-vfs
 rm -f Gemfile
 rm -f Gemfile.lock
-cp gemfiles/patch+stdlib Gemfile
+cp gemfiles/patch Gemfile
 
 gem cleanup
 bundle i
