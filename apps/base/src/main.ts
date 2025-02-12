@@ -58,13 +58,7 @@ export const startRubyVM = async (
   // 記録する処理
   const response = fetch(pkg.wasm_url);
   // 計測終了
-  response.then(() => {
-    performance.mark("poc-dl-end");
-    performance.mark('poc-init-start');
-  });
   const module = await compileWebAssemblyModule(response);
-  const fsize = await response.then(res => res.arrayBuffer().then(_ => res.headers.get("content-length")));
-  pocSpanFsize.innerHTML = fsize;
   const { vm } = await DefaultRubyVM(module, options);
   rubyVM = vm;
   await mainWithRubyVM(vm);
@@ -100,12 +94,16 @@ const runRubyScriptsInHtml = async (vm: RubyVM) => {
 const compileWebAssemblyModule = async function (
   response: Promise<Response>,
 ): Promise<WebAssembly.Module> {
-  if (!WebAssembly.compileStreaming) {
+  // if (!WebAssembly.compileStreaming) {
     const buffer = await (await response).arrayBuffer();
+    const fsize = await response.then(res => res.headers.get("content-length"));
+    pocSpanFsize.innerHTML = fsize;
+    performance.mark("poc-dl-end");
+    performance.mark('poc-init-start');
     return WebAssembly.compile(buffer);
-  } else {
-    return WebAssembly.compileStreaming(response);
-  }
+  // } else {
+    // return WebAssembly.compileStreaming(response);
+  // }
 };
 
 export default main;

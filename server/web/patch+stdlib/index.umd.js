@@ -1636,13 +1636,7 @@
         // 記録する処理
         const response = fetch(pkg.wasm_url);
         // 計測終了
-        response.then(() => {
-            performance.mark("poc-dl-end");
-            performance.mark('poc-init-start');
-        });
         const module = await compileWebAssemblyModule(response);
-        const fsize = await response.then(res => res.arrayBuffer().then(_ => res.headers.get("content-length")));
-        pocSpanFsize.innerHTML = fsize;
         const { vm } = await DefaultRubyVM(module, options);
         exports.rubyVM = vm;
         await mainWithRubyVM(vm);
@@ -1670,13 +1664,16 @@
         //   break;
     };
     const compileWebAssemblyModule = async function (response) {
-        if (!WebAssembly.compileStreaming) {
-            const buffer = await (await response).arrayBuffer();
-            return WebAssembly.compile(buffer);
-        }
-        else {
-            return WebAssembly.compileStreaming(response);
-        }
+        // if (!WebAssembly.compileStreaming) {
+        const buffer = await (await response).arrayBuffer();
+        const fsize = await response.then(res => res.headers.get("content-length"));
+        pocSpanFsize.innerHTML = fsize;
+        performance.mark("poc-dl-end");
+        performance.mark('poc-init-start');
+        return WebAssembly.compile(buffer);
+        // } else {
+        // return WebAssembly.compileStreaming(response);
+        // }
     };
 
     window.recordRubyCodeStart = recordRubyCodeStart;
