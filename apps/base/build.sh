@@ -1,4 +1,5 @@
 #!/bin/bash
+rm -rf ../server/web/*
 
 rm -rf dist/*
 rm -rf vfs

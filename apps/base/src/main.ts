@@ -58,8 +58,10 @@ export const startRubyVM = async (
   // 記録する処理
   const response = fetch(pkg.wasm_url);
   // 計測終了
-  performance.mark("poc-dl-end");
-  performance.mark('poc-init-start');
+  response.then(() => {
+    performance.mark("poc-dl-end");
+    performance.mark('poc-init-start');
+  });
   const module = await compileWebAssemblyModule(response);
   const fsize = (await response).headers.get("content-length");
   pocSpanFsize.innerHTML = fsize;
